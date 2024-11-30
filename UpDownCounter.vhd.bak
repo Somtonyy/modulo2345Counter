@@ -1,0 +1,41 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity UpDownCounter is 
+	port(
+		En, Clk, CL, UD, Load, Base_Switch : in STD_LOGIC;
+		Preset_Value : in STD_LOGIC_VECTOR(12 downto 0)
+		Q : out STD_LOGIC_VECTOR(12 downto 0)
+		
+	);
+end UpDownCounter;
+
+architecture behavior of UpDownCounter is 
+   signal Qt : STD_LOGIC_VECTOR(12 downto 0);
+	signal clear : STD_LOGIC; 
+	signal preset_max : STD_LOGIC_VECTOR(12 downto 0);
+	signal load_signal : STD_LOGIC; 
+	signal clockIn : std_logic;
+	component T_FF
+	Port (
+        T, clk, cl, load, Pr : in STD_LOGIC;
+        Q : out STD_LOGIC  
+    );
+	end component;
+	
+	component clk_gen_1_output is
+		  generic( n  : integer := 25000;
+					  n1 : integer := 500);  
+		  port( Clock : in  std_logic;
+				  c_out : out std_logic );
+	end component;
+	
+	
+	begin
+	
+	preset_max <= "101011101" when Qt = "0000000000000" and UD = '1' else Preset_Value;
+	load_signal <= '0' when (Qt = "0000000000000" and UD = '1') or Load = '0' else '1';
+	
+	
+end behavior;
